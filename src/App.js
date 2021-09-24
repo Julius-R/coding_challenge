@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
+import QueryDisplay from "./components/QueryDisplay";
 
 export default function App() {
 	return (
 		<>
-			<button>Test</button>
-			<h1>Boiler Template</h1>
+			<QueryDisplay />
 		</>
 	);
 }
