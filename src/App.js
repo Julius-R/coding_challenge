@@ -1,10 +1,14 @@
 import React from "react";
+import { observer } from "mobx-react";
+import { state } from "../mobx/store";
 import QueryDisplay from "./components/QueryDisplay";
 
-export default function App() {
+const App = () => {
 	return (
 		<>
-			<QueryDisplay />
+			<QueryDisplay store={state.rows} />
 		</>
 	);
-}
+};
+
+export default observer(App);

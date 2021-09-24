@@ -90,3 +90,12 @@ const operatorsIntegers = [
 	"less than",
 	"in list"
 ];
+
+/*
+App
+    - QueryForm
+        - QueryBuilder
+        - QuerySubmitter
+    - QueryDisplay Holds the end result of the query
+
+ */
