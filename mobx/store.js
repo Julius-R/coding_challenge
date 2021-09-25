@@ -1,9 +1,27 @@
 import { observable, action } from "mobx";
+import { v4 as uuidv4 } from "uuid"; //  For randomizing ID
 
-export const state = observable({ rows: [] });
+// Initial row to be displayed
+const defaultState = [
+	{
+		id: uuidv4(),
+		predicate: "User Email",
+		operator: "equals",
+		value: "",
+		valueTwo: null
+	}
+];
 
-export const addRow = action((row) => {
-	state.rows = state.rows.concat(row);
+export const state = observable({ rows: defaultState });
+
+export const addRow = action(() => {
+	return (state.rows = state.rows.concat({
+		id: uuidv4(),
+		predicate: "User Email",
+		operator: "equals",
+		value: "",
+		valueTwo: null
+	}));
 });
 
 export const removeRow = action((id) => {
@@ -11,5 +29,15 @@ export const removeRow = action((id) => {
 });
 
 export const updateRow = action((id, updatedRow) => {
-	state.rows = state.rows.map((row) => (row.id === id ? updatedRod : row));
+	console.log(
+		updatedRow.predicate,
+		updatedRow.operator,
+		updatedRow.value,
+		updatedRow.valueTwo
+	);
+	state.rows = state.rows.map((row) => (row.id === id ? updatedRow : row));
+});
+
+export const reset = action(() => {
+	state.rows = defaultState;
 });

@@ -4,13 +4,11 @@ import { state } from "../mobx/store";
 import QueryDisplay from "./components/QueryDisplay";
 import QueryForm from "./components/QueryForm";
 
-const App = () => {
+export default function App() {
 	return (
 		<>
 			<QueryForm />
-			{/* <QueryDisplay store={state.rows} /> */}
+			<QueryDisplay store={state.rows} />
 		</>
 	);
-};
-
-export default observer(App);
+}
