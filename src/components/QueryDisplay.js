@@ -1,9 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { addRow, removeRow } from "../../mobx/store";
 
 export default function QueryDisplay({ store }) {
+	const [row, setRow] = useState([]);
+	useEffect(() => {
+		setRow(store);
+	}, [store]);
 	return (
 		<section className="display">
+			{row.map((row) => (
+				<h1 key={row.id}>{row.name}</h1>
+			))}
 			<button
 				onClick={() => {
 					addRow({ id: 1, name: "John" });
