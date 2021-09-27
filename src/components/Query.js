@@ -1,38 +1,75 @@
-import React, { useState } from "react";
-import { predicates, operators } from "../assets/data";
+import React, { useState, useEffect } from "react";
+import { predicates, operators, placeholders } from "../assets/data";
 import { observer } from "mobx-react";
-import { updateRow } from "../../mobx/store";
+import { updateRow, removeRow, reset } from "../../mobx/store";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
-const Query = ({ row }) => {
+const Query = ({ row, numRows }) => {
 	const [query, setQuery] = useState({ ...row });
 	const [predicateType, setPredicateType] = useState("string");
+	const [inputPlaceholder, setInputPlaceholder] = useState(
+		placeholders.user_email
+	);
 	const [operatorList, setOperatorList] = useState(operators[predicateType]);
-	const updateValues = (e) => {
-		console.log(e.target.name);
-		switch (e.target.name) {
-			case "solo":
-				setQuery({ ...query, value: e.target.value });
+
+	const validateInput = (e) => {
+		let fieldName = e.target.name;
+		let val = e.target.value;
+		if (predicateType === "int" && query.operator !== "in list") {
+			if (isNaN(val)) {
+				setQuery({ ...query, [fieldName]: null });
+				alert(`Value must be a number`);
 				return;
-			case "valueOne":
-				setQuery({ ...query, value: e.target.value });
-				return;
-			case "valueTwo":
-				setQuery({ ...query, valueTwo: e.target.value });
-				return;
+			}
+		}
+		if (!val.trim()) {
+			alert(`You must enter a value`);
+			setQuery({ ...query, [fieldName]: "" });
+			return;
+		}
+		setQuery({ ...query, [fieldName]: val });
+	};
+
+	const updateRowValue = () => {
+		updateRow(query.id, query);
+	};
+
+	const checkOperator = (e) => {
+		let passCondition = ["in list", "less than", "greater than", "between"];
+		if (passCondition.indexOf(e) !== -1) {
+			return <p className="bonusText">is</p>;
 		}
 	};
+
 	return (
 		<section>
+			<FontAwesomeIcon
+				icon={faTimes}
+				onClick={() => {
+					if (numRows >= 2) {
+						removeRow(query.id);
+					} else {
+						reset();
+					}
+				}}
+			/>
 			<select
 				name="predicate"
+				defaultValue={query.predicate.dbName}
 				onBlur={() => {
 					updateRow(query.id, query);
 				}}
-				onChange={(event) => {
-					let [type, name] = event.target.value.split(",");
+				onChange={(e) => {
+					let [type, name, db] = e.target.value.split(",");
 					setPredicateType(type);
 					setOperatorList(operators[type]);
-					setQuery({ ...query, predicate: name });
+					if (type === "int") {
+						setInputPlaceholder(placeholders.int);
+					} else {
+						setInputPlaceholder(placeholders[db]);
+					}
+					setQuery({ ...query, predicate: db, value: "" });
 				}}>
 				{predicates.map((predicate) => (
 					<option
@@ -42,6 +79,7 @@ const Query = ({ row }) => {
 					</option>
 				))}
 			</select>
+			{checkOperator(query.operator)}
 			<select
 				name="operator"
 				onBlur={() => {
@@ -58,30 +96,31 @@ const Query = ({ row }) => {
 			</select>
 			{query.operator !== "between" ? (
 				<input
-					type="text"
-					name="solo"
-					onChange={updateValues}
+					name="value"
+					value={query.value}
+					placeholder={inputPlaceholder}
+					onChange={validateInput}
 					onBlur={() => {
-						updateRow(query.id, query);
+						updateRowValue();
 					}}
 				/>
 			) : (
 				<>
 					<input
 						type="text"
-						name="valueOne"
-						onChange={updateValues}
+						name="value"
+						onChange={validateInput}
 						onBlur={() => {
-							updateRow(query.id, query);
+							updateRowValue();
 						}}
 					/>
-					And
+					<p className="bonusText">and</p>
 					<input
 						type="text"
 						name="valueTwo"
-						onChange={updateValues}
+						onChange={validateInput}
 						onBlur={() => {
-							updateRow(query.id, query);
+							updateRowValue();
 						}}
 					/>
 				</>

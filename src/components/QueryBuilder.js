@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { observer } from "mobx-react";
-import { state } from "../../mobx/store";
+import { addRow, state } from "../../mobx/store";
 import Query from "./Query";
 
 const QueryBuilder = () => {
@@ -8,12 +8,21 @@ const QueryBuilder = () => {
 	const [rows, setRow] = useState([]);
 	useEffect(() => {
 		setRow(data);
-	}, [data]);
+	}, [state.rows]);
 	return (
-		<div>
-			{rows.map((row) => (
-				<Query key={row.id} row={row} />
-			))}
+		<div className="queryBuilder">
+			<div className="queries">
+				{rows.map((row) => (
+					<Query key={row.id} numRows={rows.length} row={row} />
+				))}
+			</div>
+			<button
+				onClick={() => {
+					addRow();
+				}}
+				className="queryAdder btn-blue">
+				And
+			</button>
 		</div>
 	);
 };

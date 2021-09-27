@@ -99,3 +99,27 @@ App
     - QueryDisplay Holds the end result of the query
 
  */
+
+// validate if isNumber and alert if not
+const validateInput = (e) => {
+	let fieldName = e.target.name;
+	let value = e.target.value;
+	if(isNaN(value)){
+		alert(`Value must be a number`);
+		setQuery({ ...query, isErrorFree: false });
+		return;
+	}
+	if(!query.value.trim()){
+		alert(`You must enter a value`);
+		setQuery({ ...query, isErrorFree: false });
+		return;
+	} 
+	setQuery({ ...query, [fieldName]: value });
+}
+
+const updateRowValue = () => {
+	if(query.isErrorFree){
+		updateRow(query.id, query);
+	}
+	
+}

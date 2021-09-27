@@ -4,8 +4,8 @@ import QuerySubmitter from "./QuerySubmitter";
 
 export default function QueryForm() {
 	return (
-		<div>
-			Query Form
+		<div className="queryForm">
+			<p className="big-text">Search for Sessions </p>
 			<QueryBuilder />
 			<QuerySubmitter />
 		</div>
