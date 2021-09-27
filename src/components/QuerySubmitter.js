@@ -7,7 +7,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 const QuerySubmitter = () => {
 	return (
 		<div className="querySubmitter">
-			<button className="btn-grey" onClick={() => buildSearchQuery()}>
+			<button className="btn-blue" onClick={() => buildSearchQuery()}>
 				<FontAwesomeIcon icon={faSearch} /> Search
 			</button>
 			<button className="btn-grey" onClick={() => reset()}>
