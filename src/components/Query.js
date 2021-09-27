@@ -35,17 +35,20 @@ const Query = ({ row, numRows }) => {
 		updateRow(query.id, query);
 	};
 
-	const checkOperator = (e) => {
+	const checkOperator = () => {
 		let passCondition = ["in list", "less than", "greater than", "between"];
-		if (passCondition.indexOf(e) !== -1) {
-			return <p className="bonusText">is</p>;
+		if (passCondition.indexOf(query.operator) !== -1) {
+			return true;
+		} else {
+			return false;
 		}
 	};
 
 	return (
-		<section>
+		<section className="query">
 			<FontAwesomeIcon
 				icon={faTimes}
+				className="queryClose"
 				onClick={() => {
 					if (numRows >= 2) {
 						removeRow(query.id);
@@ -56,6 +59,7 @@ const Query = ({ row, numRows }) => {
 			/>
 			<select
 				name="predicate"
+				className={checkOperator() ? "small-box" : ""}
 				defaultValue={query.predicate.dbName}
 				onBlur={() => {
 					updateRow(query.id, query);
@@ -79,14 +83,15 @@ const Query = ({ row, numRows }) => {
 					</option>
 				))}
 			</select>
-			{checkOperator(query.operator)}
+			{checkOperator() && <p className="bonusText">is</p>}
 			<select
 				name="operator"
+				className={checkOperator() ? "small-box" : ""}
 				onBlur={() => {
 					updateRow(query.id, query);
 				}}
-				onChange={(event) => {
-					setQuery({ ...query, operator: event.target.value });
+				onChange={(e) => {
+					setQuery({ ...query, operator: e.target.value });
 				}}>
 				{operatorList.map((operator) => (
 					<option key={operator} value={operator}>
@@ -109,6 +114,8 @@ const Query = ({ row, numRows }) => {
 					<input
 						type="text"
 						name="value"
+						placeholder={inputPlaceholder}
+						className={checkOperator() ? "small-box" : ""}
 						onChange={validateInput}
 						onBlur={() => {
 							updateRowValue();
@@ -118,6 +125,8 @@ const Query = ({ row, numRows }) => {
 					<input
 						type="text"
 						name="valueTwo"
+						placeholder={inputPlaceholder}
+						className={checkOperator() ? "small-box" : ""}
 						onChange={validateInput}
 						onBlur={() => {
 							updateRowValue();

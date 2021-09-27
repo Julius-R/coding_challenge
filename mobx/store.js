@@ -38,6 +38,7 @@ export const updateRow = action((id, updatedRow) => {
 export const reset = action(() => {
 	state.rows = [];
 	addRow();
+	state.query = "";
 });
 
 const clearEndDuplicate = (query, valToRemove) => {
